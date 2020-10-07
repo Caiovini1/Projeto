@@ -7,7 +7,7 @@ if (!defined("USER")) {
     define('USER', 'root');
 }
 if (!defined("PASSWORD")) {
-    define('PASSWORD', '');
+    define('PASSWORD', 'root');
 }
 if (!defined("DB")) {
     define('DB', 'cadastros');

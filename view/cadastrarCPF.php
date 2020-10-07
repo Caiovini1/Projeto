@@ -29,22 +29,22 @@
             <div>
                 <form name="formularioCadastro" action="?section=Controle&function=cadastrarPessoa" method="POST">
                     <div class="form-group col-md-4">
-                        <label>Razão social:</label><input value="<?php if(isset($pessoa))echo $pessoa[0];?>" type="text" name="razaoSocialCadastro" class="form-control" required oninvalid="setCustomValidity('O campo Razão Social deve ser informado')" onchange="try{setCustomValidity('')}catch(e){}"/>
+                        <label>Razão social:</label><input value="<?php if(isset($pessoa))echo $pessoa[0];?>" type="text" name="razaoSocialCadastro" class="form-control"  oninvalid="setCustomValidity('O campo Razão Social deve ser informado')" onchange="try{setCustomValidity('')}catch(e){}"/>
                     </div>
                     <div class="form-group col-md-4">
-                        <label>Nome fantasia:</label><input value="<?php if(isset($pessoa))echo $pessoa[1];?>" type="text" name="nomeFantasiaCadastro" class="form-control" required oninvalid="setCustomValidity('O campo Nome fantasia deve ser informado')" onchange="try{setCustomValidity('')}catch(e){}"/>
+                        <label>Nome fantasia:</label><input value="<?php if(isset($pessoa))echo $pessoa[1];?>" type="text" name="nomeFantasiaCadastro" class="form-control"  oninvalid="setCustomValidity('O campo Nome fantasia deve ser informado')" onchange="try{setCustomValidity('')}catch(e){}"/>
                     </div>
                     <div class="form-group  col-md-4">
-                        <label>CPF:</label><input type="text" id="cpf" name="cpfCadastro" maxlength="14" name="cpfCadastro" class="form-control" value=<?php echo $cpf ?> readonly>
+                        <label>CPF:</label><input type="text" id="cpf" name="cpfCadastro" maxlength="14" name="cpfCadastro" class="form-control" required value=<?php echo $cpf ?> readonly>
                     </div>
                     <div class="form-group  col-md-4">
-                        <label>Telefone:</label><input type="text" value="<?php if(isset($pessoa))echo $pessoa[3];?>" id="telefone" maxlength="13" name="telefoneCadastro" required class="form-control" oninvalid="setCustomValidity('O campo Telefone deve ser informado')" onkeypress="formatar_mascara(this,'## #####-####')">
+                        <label>Telefone:</label><input type="text" value="<?php if(isset($pessoa))echo $pessoa[3];?>" id="telefone" required maxlength="13" name="telefoneCadastro"  class="form-control" oninvalid="setCustomValidity('O campo Telefone deve ser informado')" onkeypress="formatar_mascara(this,'## #####-####')">
                     </div>
                     <div class="form-group  col-md-4">
-                        <label>RG:</label><input type="text" id="rg" value="<?php if(isset($pessoa))echo $pessoa[4];?>" name="rgCadastro" maxlength="18" class="form-control" required oninvalid="setCustomValidity('O campo RG deve ser informado')"onkeypress="formatar_mascara(this,'#.###.###')" >
+                        <label>RG:</label><input type="text" id="rg" value="<?php if(isset($pessoa))echo $pessoa[4];?>" name="rgCadastro" maxlength="18" class="form-control"  oninvalid="setCustomValidity('O campo RG deve ser informado')"onkeypress="formatar_mascara(this,'#.###.###')" >
                     </div>
                     <div class="form-group col-md-4">
-                        <label>E-mail:</label><input type="email" value="<?php if(isset($pessoa))echo $pessoa[5];?>" name="emailCadastro" class="form-control" maxlength="200" required oninvalid="setCustomValidity('E-mail inválido')" onchange="try{setCustomValidity('')}catch(e){}"/>
+                        <label>E-mail:</label><input type="email" value="<?php if(isset($pessoa))echo $pessoa[5];?>" name="emailCadastro" class="form-control" maxlength="200"  oninvalid="setCustomValidity('E-mail inválido')" onchange="try{setCustomValidity('')}catch(e){}"/>
                         <?php if(isset($emailUnico) && !$emailUnico){ echo "<span style='color:red;'>E-mail inserido já cadastrado</span>"; echo "<br>";}?>
                     </div>
                     <div class="form-group col-md-4">
@@ -113,6 +113,35 @@
 
         <!-- FIM DA TELA DE CADASTRO -->
 
+        
+<!-- Script para máscara do Telefone -->
+<script>
+$(document).ready(function(){
+    $('body').on('focus', '#phone', function(){
+        var maskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+        options = {
+            onKeyPress: function(field, options) {
+                field.mask(maskBehavior.apply({}, arguments), options);
+
+                if(field[0].value.length >= 14){
+                    var val = field[0].value.replace(/\D/g, '');
+                    if(/\d\d(\d)\1{7,8}/.test(val)){
+                        field[0].value = '';
+                        alert('Telefone Invalido');
+                    }
+                }
+            }
+        };
+        $(this).mask(maskBehavior, options);
+    });
+});
+
+
+</script>
+        
+        
     </body>
 
 
@@ -127,13 +156,3 @@
 
   <!-- Função utilizada para inserir mascara nos campos -->
 
-  <script type="text/javascript">
-    function formatar_mascara(src, mascara) {
-        var campo = src.value.length;
-        var saida = mascara.substring(0,1);
-        var texto = mascara.substring(campo);
-        if(texto.substring(0,1) != saida) {
-            src.value += texto.substring(0,1);
-        }
-    }
-</script>

@@ -129,6 +129,12 @@ public function detalharPessoa(){
     require('view/detalhePessoa.php');
 }
 
+public function detalharPessoaErro($idPessoa){
+    $pessoa = $this->pessoaManager->buscaInfoPessoaDetalhe($idPessoa);
+    $listaEstadoCivil = $this->estadoCivilManager->listaEstadoCivil();
+    require('view/detalhePessoa.php');
+}
+
     //Gera o relatório de usuários
 public function gerarRelatorioUsuario(){
     if(isset($_GET['html'])){
@@ -173,7 +179,7 @@ public function gerarRelatorioUsuario(){
 
     $dompdf->stream(
         "relatorioUsuarios.pdf",
-        array("Attachment" => false),
+        array("Attachment" => false)
     );
 }
 
@@ -222,7 +228,7 @@ public function gerarRelatorioPessoa(){
 
     $dompdf->stream(
         "relatorioPessoas.pdf",
-        array("Attachment" => false),
+        array("Attachment" => false)
     );
 }
 
@@ -243,6 +249,8 @@ public function deletarPessoa(){
 public function pessoaFisicaAlteraDados(){
     if(isset($_POST['enviado'])){
         $idPessoa = $_POST['idPessoa'];
+        $check = 0;
+        $tamanho = 0;
         $razaoSocial = $_POST['razaoSocialPessoaAlteraDados'];
         $nomeFantasia = $_POST['nomeFantasiaAlteraDados'];
         $rg = $_POST['rgPessoaAlteraDados'];
@@ -250,6 +258,45 @@ public function pessoaFisicaAlteraDados(){
         $telefone = $_POST['telefonePessoaAlteraDados'];
         $email = $_POST['emailPessoaAlteraDados'];
         $idEstadoCivil = $_POST['idEstadoCivilAlteraDados'];
+        
+        if(empty($razaoSocial) || empty($nomeFantasia) || empty($rg) || empty($cpf) || empty($telefone) || empty($email) || empty($idEstadoCivil)){
+            $check++;
+        }
+        if($check == 1){
+            echo "<script type=\"text/javascript\">alert('Todos os campos são obrigatorios!');</script>";
+            return false;
+        }
+        
+        if(strlen($razaoSocial) > 130 ){
+            echo "<script type=\"text/javascript\">alert('O campo razao social excedeu o limite de caracteres!');</script>";
+            $this->detalharPessoaErro($idPessoa);
+            return false;
+            
+        }
+        
+        if(strlen($nomeFantasia) > 130){
+            echo "<script type=\"text/javascript\">alert('O campo Nome Fantasia excedeu o limite de caracteres!');</script>";
+            $this->detalharPessoaErro($idPessoa);
+            return false;
+        }
+        
+        if(strlen($cpf) != 14){
+            echo "<script type=\"text/javascript\">alert('CPF invalido!');</script>";
+            $this->detalharPessoaErro($idPessoa);
+            return false;
+        }
+        
+        if(strlen($telefone) > 18){
+            echo "<script type=\"text/javascript\">alert('Telefone invalido!');</script>";
+            $this->detalharPessoaErro($idPessoa);
+            return false;
+        }
+        
+        if(strlen($email) > 200){
+            echo "<script type=\"text/javascript\">alert('O campo E-mail excedeu o limite de caracteres!');</script>";
+            $this->detalharPessoaErro($idPessoa);
+            return false;
+        }
 
         try {
             $this->pessoaManager->alteraDadosPF($idPessoa,$razaoSocial, $nomeFantasia, $telefone, $email, $idEstadoCivil, $rg, $cpf);
@@ -313,21 +360,11 @@ public function loginAcao(){
 
     //Função utilizada para enviar o usuário para a página que possibilita cadastrar uma Pessoa Física ou Jurídica
 public function cadastrarPessoaAcao(){
+    $listaEstadoCivil = $this->estadoCivilManager->listaEstadoCivil();
     require('view/cadastrar.php');
 }
 
     //Função primária utilizada para verificar se o cadastro é de Pessoa Física ou Jurídica
-public function selecaoCpfCnpj(){
-    if(isset($_POST["inputCPF"]) && strlen($_POST["inputCPF"]) > 0){
-        $cpf = $_POST["inputCPF"];
-        $listaEstadoCivil = $this->estadoCivilManager->listaEstadoCivil();
-        require('view/cadastrarCPF.php');
-    }else{
-        $listaEstadoCivil = $this->estadoCivilManager->listaEstadoCivil();
-        $cnpj = $_POST['inputCNPJ'];
-        require('view/cadastrarCNPJ.php');
-    }
-}
 
     //Função para realizar o login
 public function fazerLogin(){   
@@ -350,8 +387,26 @@ public function fazerLogin(){
     //Função para cadastrar uma pessoa no sistema
 public function cadastrarPessoa(){
     if (isset($_POST['enviado'])){
-
-            //Código para validar campos em branco
+        
+        var_dump($_POST);
+        
+        if(empty ($_POST['cpfCadastro']) && empty($_POST['cnpjCadastro'])){
+            echo "<script type=\"text/javascript\">alert(\"Existem campos em branco!\");</script>";            
+            require("view/cadastrar.php");
+        } else if(isset($_POST['cpfCadastro'])){
+            $cpfCadastro = $_POST['cpfCadastro'];
+            $rgCadastro = $_POST['rgCadastro'];
+            
+        } else if(isset($_POST['cnpjCadastro'])){
+            $cnpjCadastro = $_POST['cnpjCadastro'];
+                        
+        }
+        unset($_POST['cpfCadastro']);
+        unset($_POST['rgCadastro']);
+        unset($_POST['cnpjCadastro']);
+        echo "aaaa \n ";
+        var_dump($_POST);
+        //Código para validar campos em branco
         $erro = false;
         $i = 0;
                 // Cria uma variável com cada indice do $_POST
@@ -365,9 +420,8 @@ public function cadastrarPessoa(){
             $i++;
         }
         if($erro){
-            echo "<script type=\"text/javascript\">alert(\"Existem campos em branco!\");</script>";
-            $cpf = $_POST['cpfCadastro'];
-            require("view/cadastrarCPF.php");
+            echo "<script type=\"text/javascript\">alert(\"Existem campos em branco!\");</script>";            
+            require("view/cadastrar.php");
 
         } else{
             $razaoSocial = $_POST['razaoSocialCadastro'];
@@ -376,13 +430,11 @@ public function cadastrarPessoa(){
             $telefoneCadastro = $_POST['telefoneCadastro'];
             $emailCadastro = $_POST['emailCadastro'];
 
-            if(isset($_POST['cpfCadastro'])){
-                $rgCadastro = $_POST['rgCadastro'];
-                $cpf = $_POST['cpfCadastro'];
+            if(isset($cpfCadastro)){
                 try{
                     $idGerado = $this->pessoaManager->cadastrarPessoa($razaoSocial, $nomeFantasia, $telefoneCadastro, $emailCadastro, $idEstadoCivil);
                     if($idGerado != null){
-                        $result = $this->pessoaManager->cadastrarPessoaFisica($idGerado, $rgCadastro, $cpf);
+                        $result = $this->pessoaManager->cadastrarPessoaFisica($idGerado, $rgCadastro, $cpfCadastro);
                         if($result){
                             echo "<script type=\"text/javascript\">alert(\"Pessoa cadastrada com sucesso.\");</script>";
                             $this->inicial();
@@ -394,12 +446,11 @@ public function cadastrarPessoa(){
                 }catch (Excetpion $e) {
                     $msg = $e->getMessage();
                 }
-            } else if(isset($_POST['cnpjCadastro'])){
-                $cnpj = $_POST['cnpjCadastro'];
+            } else if(isset ($cnpjCadastro)){
                 try{
                     $idGerado = $this->pessoaManager->cadastrarPessoa($razaoSocial, $nomeFantasia, $telefoneCadastro, $emailCadastro, $idEstadoCivil);
                     if($idGerado != null){
-                        $result = $this->pessoaManager->cadastrarPessoaJuridica($idGerado, $cnpj);
+                        $result = $this->pessoaManager->cadastrarPessoaJuridica($idGerado, $cnpjCadastro);
                         if($result){
                             echo "<script type=\"text/javascript\">alert(\"Pessoa cadastrada com sucesso.\");</script>";
                             $this->inicial();
