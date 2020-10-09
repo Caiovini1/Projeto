@@ -296,42 +296,43 @@ public function pessoaFisicaAlteraDados() {
             $check++;
         }
         if ($check == 1) {
-            echo "<script type=\"text/javascript\">alert('Todos os campos são obrigatorios!');</script>";
+            echo "<script type=\"text/javascript\">alert('Todos os campos são obrigatórios!');</script>";
             return false;
         }
 
         if (strlen($razaoSocial) > 130) {
-            echo "<script type=\"text/javascript\">alert('O campo razao social excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('O razão social excedeu o limite de caracteres!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
         if (strlen($nomeFantasia) > 130) {
-            echo "<script type=\"text/javascript\">alert('O campo Nome Fantasia excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('O Nome Fantasia excedeu o limite de caracteres!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
+        var_dump(strlen($cpf));
         if (strlen($cpf) != 14) {
-            echo "<script type=\"text/javascript\">alert('CPF invalido!');</script>";
+            echo "<script type=\"text/javascript\">alert('CPF inválido!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
-        if (strlen($rg) > 0) {
-            echo "<script type=\"text/javascript\">alert('CPF invalido!');</script>";
+        if (strlen($rg) < 5) {
+            echo "<script type=\"text/javascript\">alert('RG inválido!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
         if (strlen($telefone) > 18) {
-            echo "<script type=\"text/javascript\">alert('Telefone invalido!');</script>";
+            echo "<script type=\"text/javascript\">alert('Telefone inválido!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
         if (strlen($email) > 200) {
-            echo "<script type=\"text/javascript\">alert('O campo E-mail excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('O E-mail excedeu o limite de caracteres!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
@@ -361,19 +362,19 @@ public function pessoaJuridicaAlteraDados() {
             $check++;
         }
         if ($check == 1) {
-            echo "<script type=\"text/javascript\">alert('Todos os campos são obrigatorios!');</script>";
+            echo "<script type=\"text/javascript\">alert('Todos os campos são obrigatórios!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
         if (strlen($razaoSocial) > 130) {
-            echo "<script type=\"text/javascript\">alert('O campo razao social excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('O razão social excedeu o limite de caracteres!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
 
         if (strlen($nomeFantasia) > 130) {
-            echo "<script type=\"text/javascript\">alert('O campo Nome Fantasia excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('O nome Fantasia excedeu o limite de caracteres!');</script>";
             $this->detalharPessoaErro($idPessoa);
             return false;
         }
@@ -463,13 +464,13 @@ public function fazerLogin() {
     }
 
     if (strlen($login) > 100) {
-        echo "<script type=\"text/javascript\">alert('O campo login excedeu o limite de caracteres!');</script>";
+        echo "<script type=\"text/javascript\">alert('O login excedeu o limite de caracteres!');</script>";
         $this->loginAcao();
         return false;
     }
 
     if (strlen($senha) > 100){
-        echo "<script type=\"text/javascript\">alert('O campo senha excedeu o limite de caracteres!');</script>";
+        echo "<script type=\"text/javascript\">alert('O senha excedeu o limite de caracteres!');</script>";
         $this->loginAcao();
         return false;
     }
@@ -490,80 +491,110 @@ public function fazerLogin() {
     //Função para cadastrar uma pessoa no sistema
 public function cadastrarPessoa() {
     if (isset($_POST['enviado'])) { 
-
+        $razaoSocial = $_POST['razaoSocialCadastro'];
+        $idEstadoCivil = $_POST ['estadoCivilCadastro'];
+        $nomeFantasia = $_POST['nomeFantasiaCadastro'];
+        $telefoneCadastro = $_POST['telefoneCadastro'];
+        $emailCadastro = $_POST['emailCadastro'];
+        $cpfCadastro = $_POST['cpfCadastro'];
+        $rgCadastro = $_POST['rgCadastro'];
+        $cnpjCadastro = $_POST['cnpjCadastro'];
+        $check = 0;
 
         if (empty($_POST['cpfCadastro']) && empty($_POST['cnpjCadastro'])) {
-            echo "<script type=\"text/javascript\">alert(\"Existem campos em branco!\");</script>";
-            require("view/cadastrar.php");
+            echo "<script type=\"text/javascript\">alert(\"Preencha um CPF ou CNPJ!\");</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
         }
 
-        if (strlen($_POST['cpfCadastro']) == 14) {
-            $cpfCadastro = $_POST['cpfCadastro'];
-            $rgCadastro = $_POST['rgCadastro'];
-        } else if (strlen($_POST['cnpjCadastro']) == 18) {
-            $cnpjCadastro = $_POST['cnpjCadastro'];
+        if (strlen($cpfCadastro) > 1 && strlen($cpfCadastro) !== 14 ) {
+            echo "<script type=\"text/javascript\">alert('CPF inválido!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+            
         }
-        unset($_POST['cpfCadastro']);
-        unset($_POST['rgCadastro']);
-        unset($_POST['cnpjCadastro']);
-
-            //Código para validar demais campos em branco
-        $erro = false;
-        $i = 0;
-            // Cria uma variável com cada indice do $_POST
-        foreach ($_POST as $chave => $valor) {
-            $pessoa[$i] = $_POST[$chave];
-                // Verifica se tem algum valor em branco
-            if (empty($valor)) {
-
-                $erro = true;
-            }
-            $i++;
+        if (strlen($cnpjCadastro) > 1 && strlen($cnpjCadastro) !== 18) {
+            echo "<script type=\"text/javascript\">alert('CNPJ inválido!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
         }
-        if ($erro) {
-            echo "<script type=\"text/javascript\">alert(\"Existem campos em branco!\");</script>";
-            require("view/cadastrar.php");
-        } else {
-            $razaoSocial = $_POST['razaoSocialCadastro'];
-            $idEstadoCivil = $_POST ['estadoCivilCadastro'];
-            $nomeFantasia = $_POST['nomeFantasiaCadastro'];
-            $telefoneCadastro = $_POST['telefoneCadastro'];
-            $emailCadastro = $_POST['emailCadastro'];
 
+        if (strlen($rgCadastro) < 4) {
+            echo "<script type=\"text/javascript\">alert('RG inválido!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+        }
 
-            if (isset($cpfCadastro)) {
+        if (empty($razaoSocial) || empty($nomeFantasia) || empty($telefoneCadastro) || empty($emailCadastro) || empty($idEstadoCivil)) {
+            $check++;
+        }
+        if ($check == 1) {
+            echo "<script type=\"text/javascript\">alert('Todos os campos são obrigatorios!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+        }
 
-                try {
-                    $idGerado = $this->pessoaManager->cadastrarPessoa($razaoSocial, $nomeFantasia, $telefoneCadastro, $emailCadastro, $idEstadoCivil);
-                    if ($idGerado != null) {
-                        $result = $this->pessoaManager->cadastrarPessoaFisica($idGerado, $rgCadastro, $cpfCadastro);
-                        if ($result) {
-                            echo "<script type=\"text/javascript\">alert(\"Pessoa cadastrada com sucesso.\");</script>";
-                            $this->inicial();
-                        } else {
-                            echo "<script type=\"text/javascript\">alert(\"Pessoa não cadastrada.\");</script>";
-                        }
+        if (strlen($razaoSocial) > 130) {
+            echo "<script type=\"text/javascript\">alert('O razao social excedeu o limite de caracteres!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+        }
+
+        if (strlen($nomeFantasia) > 130) {
+            echo "<script type=\"text/javascript\">alert('O Nome Fantasia excedeu o limite de caracteres!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+        }
+
+        if (strlen($telefoneCadastro) < 8) {
+            echo "<script type=\"text/javascript\">alert('Telefone inválido!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+        }
+
+        if (strlen($emailCadastro) > 200) {
+            echo "<script type=\"text/javascript\">alert('O E-mail excedeu o limite de caracteres!');</script>";
+            $this->cadastrarPessoaAcao();
+            return false;
+        }
+        //var_dump($cpfCadastro);
+        //var_dump($cnpjCadastro);
+
+        if (strlen($cpfCadastro) > 1) {
+            //echo"teste";
+
+            try {
+                $idGerado = $this->pessoaManager->cadastrarPessoa($razaoSocial, $nomeFantasia, $telefoneCadastro, $emailCadastro, $idEstadoCivil);
+                if ($idGerado != null) {
+                    $result = $this->pessoaManager->cadastrarPessoaFisica($idGerado, $rgCadastro, $cpfCadastro);
+                    if ($result) {
+                        echo "<script type=\"text/javascript\">alert(\"Pessoa cadastrada com sucesso.\");</script>";
+                        $this->inicial();
+                    } else {
+                        echo "<script type=\"text/javascript\">alert(\"Pessoa não cadastrada.\");</script>";
                     }
-                } catch (Excetpion $e) {
-                    $msg = $e->getMessage();
                 }
-            } else if (isset($cnpjCadastro)) {
-                try {
-                    $idGerado = $this->pessoaManager->cadastrarPessoa($razaoSocial, $nomeFantasia, $telefoneCadastro, $emailCadastro, $idEstadoCivil);
-                    if ($idGerado != null) {
+            } catch (Excetpion $e) {
+                $msg = $e->getMessage();
+            }
+        } else if (strlen($cnpjCadastro) > 1) {
+            //echo"teste2";
+            try {
+                $idGerado = $this->pessoaManager->cadastrarPessoa($razaoSocial, $nomeFantasia, $telefoneCadastro, $emailCadastro, $idEstadoCivil);
+                if ($idGerado != null) {
                             //echo $cnpjCadastro;
-                        $result = $this->pessoaManager->cadastrarPessoaJuridica($idGerado, $cnpjCadastro);
-                        if ($result) {
-                            echo "<script type=\"text/javascript\">alert(\"Pessoa cadastrada com sucesso.\");</script>";
-                            $this->inicial();
-                        } else {
-                            echo "<script type=\"text/javascript\">alert(\"Pessoa não cadastrada.\");</script>";
-                        }
+                    $result = $this->pessoaManager->cadastrarPessoaJuridica($idGerado, $cnpjCadastro);
+                    if ($result) {
+                        echo "<script type=\"text/javascript\">alert(\"Pessoa cadastrada com sucesso.\");</script>";
+                        $this->inicial();
+                    } else {
+                        echo "<script type=\"text/javascript\">alert(\"Pessoa não cadastrada.\");</script>";
                     }
-                } catch (Excetpion $e) {
-                    $msg = $e->getMessage();
                 }
+            } catch (Excetpion $e) {
+                $msg = $e->getMessage();
             }
+
         }
     }
 }
@@ -593,13 +624,13 @@ public function usuarioAlteraDados() {
         }
 
         if (strlen($loginAlterado) > 100) {
-            echo "<script type=\"text/javascript\">alert('O campo Login excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('O login excedeu o limite de caracteres!');</script>";
             $this->detalharUsuarioErro($idUsuario);
             return false;
         }
 
         if (strlen($senhaAlterada) >100 ) {
-            echo "<script type=\"text/javascript\">alert('O campo senha excedeu o limite de caracteres!');</script>";
+            echo "<script type=\"text/javascript\">alert('A senha excedeu o limite de caracteres!');</script>";
             $this->detalharUsuarioErro($idUsuario);
             return false;
         }
