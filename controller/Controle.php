@@ -507,19 +507,19 @@ public function cadastrarPessoa() {
             return false;
         }
 
-        if (strlen($cpfCadastro) > 1 && strlen($cpfCadastro) !== 14 ) {
+        if (strlen($cpfCadastro) > 0 && strlen($cpfCadastro) !== 14 ) {
             echo "<script type=\"text/javascript\">alert('CPF inválido!');</script>";
             $this->cadastrarPessoaAcao();
             return false;
             
         }
-        if (strlen($cnpjCadastro) > 1 && strlen($cnpjCadastro) !== 18) {
+        if (strlen($cnpjCadastro) > 0 && strlen($cnpjCadastro) !== 18) {
             echo "<script type=\"text/javascript\">alert('CNPJ inválido!');</script>";
             $this->cadastrarPessoaAcao();
             return false;
         }
 
-        if (strlen($rgCadastro) < 4) {
+        if (strlen($rgCadastro) < 4 && strlen($cnpjCadastro) < 1) {
             echo "<script type=\"text/javascript\">alert('RG inválido!');</script>";
             $this->cadastrarPessoaAcao();
             return false;
