@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php ini_set('default_charset', 'UTF-8'); ?>
 <html lang="pt-br">
 <head>
 	<title>Relatório de pessoas cadastradas</title>
@@ -12,7 +13,7 @@
 
 	<!--MENU SUPERIOR -->
 
-	<?php include('menu.php');?>
+	<?php include('menu.php'); ?>
 
 	<!--FIM MENU SUPERIOR -->
 

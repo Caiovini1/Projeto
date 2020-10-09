@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php ini_set('default_charset', 'UTF-8'); ?>
 <html lang="pt-br">
 <head>
     <title>Cadastrar Usuário</title>

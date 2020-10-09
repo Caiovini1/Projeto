@@ -67,6 +67,6 @@ class Pessoa
 
     public function setIdEstadoCivil($idEstadoCivil){
         $this->idEstadoCivil = $idEstadoCivil;
-    }
+    } 
 }
 ?>

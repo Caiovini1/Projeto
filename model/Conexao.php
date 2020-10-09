@@ -14,7 +14,7 @@ if (!defined("DB")) {
 }
 
 
-$conexao = mysqli_connect(HOST, USER, PASSWORD, DB) or die ('Não foi possível conectar');
+$conexao = mysqli_connect(HOST, USER, PASSWORD, DB) or die ('Nao foi possível conectar');
 mysqli_query($conexao, "SET NAMES utf8");
 mysqli_query($conexao, "SET CHARACTER_SET utf8");
 ?>

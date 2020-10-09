@@ -11,5 +11,5 @@ class EstadoCivilManager
 
     public function listaEstadoCivil(){
         return $this->factory->listaEstadoCivil();
-    }
+    } 
 }

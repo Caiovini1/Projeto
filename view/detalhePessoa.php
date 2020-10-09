@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php ini_set('default_charset', 'UTF-8'); ?>
 <html lang="pt-br">
     <head>
 
@@ -17,17 +18,17 @@
 
         <!--MENU SUPERIOR -->
 
-        <?php include('menu.php'); ?>
+        <?php include('menu.php');  ?>
 
         <!--FIM MENU SUPERIOR -->
 
         <!-- TELA DE CADASTRO -->
         <div style="text-align:center">
-            <h1>Alteracao de dados cadastrais</h1>
+            <h1>Alteração de dados cadastrais</h1>
         </div>
         <?php
         if (end($pessoa[0]) == 0) {$check = 1;//Verifica se o ultimo campo do array é 0, se sim, significa que é uma Pessoa Física
-        //Formulário para Pessoa Física
+        //Formulario para Pessoa Fi�sica
             ?>
             <div class="container mt-5">
                 <form id="pessoaFisicaFrm" action="?section=Controle&function=pessoaFisicaAlteraDados" class="row" method="POST">
@@ -37,7 +38,7 @@
                     </div>
                     
                     <div class="form-group col-6">
-                        <label for="razaoSocialPessoa">Razao Social:</label>
+                        <label for="razaoSocialPessoa">Razãao Social:</label>
                         <input id="razaoSocialPessoa"  name="razaoSocialPessoaAlteraDados" maxlength="130" type="text" value="<?= $pessoa[0][1] ?>" class="form-control">
                     </div>
 
@@ -71,25 +72,32 @@
                         <?php
                         //Código utilizado para alterar os 2 primeiros campos do array listaEstadoCivil inserindo o estado civil da pessoa atual, para que seja mostrado esse valor de inicio no combo box
                         for ($i = 0; $i < count($listaEstadoCivil); $i++) {
-                            if ($listaEstadoCivil[$i] == $pessoa[0][7]) {
-                                $aux = $listaEstadoCivil[0];
-                                $aux2 = $listaEstadoCivil[1];
+                            if ($listaEstadoCivil[$i]['id'] == $pessoa[0][7]) {
+                                $aux1 = $listaEstadoCivil[0]['0'];
+                                $aux2 = $listaEstadoCivil[0]['descricao'];
+                                $aux3 = $listaEstadoCivil[0]['1'];
+                                $aux4 = $listaEstadoCivil[0]['id'];
 
-                                $listaEstadoCivil[0] = $pessoa[0][7];
-                                $listaEstadoCivil[1] = $pessoa[0][8];
-
-                                $listaEstadoCivil[$i] = $aux;
-                                $listaEstadoCivil[$i + 1] = $aux2;
+                                $listaEstadoCivil[0]['0'] = $pessoa[0][8];
+                                $listaEstadoCivil[0]['id'] = $pessoa[0][7];
+                                $listaEstadoCivil[0]['1'] = $pessoa[0][8];
+                                $listaEstadoCivil[0]['descricao'] = $pessoa[0][8];
+                                
+                                $listaEstadoCivil[$i]['0'] = $aux1;
+                                $listaEstadoCivil[$i]['descricao'] = $aux2;
+                                $listaEstadoCivil[$i]['1'] = $aux3;
+                                $listaEstadoCivil[$i]['id'] = $aux4;
                             }
                         }
 
                         echo "<select name = 'idEstadoCivilAlteraDados'>";
                         $tamanho = count($listaEstadoCivil);
                         if (isset($listaEstadoCivil)) {
-                            for ($i = 0; $i < $tamanho; $i = $i + 2) {
-                                echo "<option value = {$listaEstadoCivil[$i]}";
+                            error_log(print_r($listaEstadoCivil, true));
+                            for ($i = 0; $i < $tamanho; $i = $i + 1) {
+                                echo "<option value = {$listaEstadoCivil[$i]['id']}";
                                 //echo "selected = 'selected'";
-                                echo ">{$listaEstadoCivil[$i + 1]}</option>";
+                                echo ">{$listaEstadoCivil[$i]['descricao']}</option>";
                             }
                         }
                         echo "</select>"
@@ -108,7 +116,7 @@
         } else { $check = 0;
 
 
-    //Formulário para Pessoa Jurídica
+    //Formulario para Pessoa Juridica
             ?>
             <div class="container mt-5">
                 <form id="pessoaJuridicaFrm" action="?section=Controle&function=pessoaJuridicaAlteraDados" class="row" method="POST">
@@ -146,25 +154,35 @@
                         <?php
                         //Código utilizado para alterar os 2 primeiros campos do array listaEstadoCivil inserindo o estado civil da pessoa atual, para que seja mostrado esse valor de inicio no combo box
                         for ($i = 0; $i < count($listaEstadoCivil); $i++) {
-                            if ($listaEstadoCivil[$i] == $pessoa[0][6]) {
-                                $aux = $listaEstadoCivil[0];
-                                $aux2 = $listaEstadoCivil[1];
+                            if ($listaEstadoCivil[$i]['id'] == $pessoa[0][6]) {
+                                
+                                $aux1 = $listaEstadoCivil[0]['0'];
+                                $aux2 = $listaEstadoCivil[0]['descricao'];
+                                $aux3 = $listaEstadoCivil[0]['1'];
+                                $aux4 = $listaEstadoCivil[0]['id'];
 
-                                $listaEstadoCivil[0] = $pessoa[0][6];
-                                $listaEstadoCivil[1] = $pessoa[0][7];
-
-                                $listaEstadoCivil[$i] = $aux;
-                                $listaEstadoCivil[$i + 1] = $aux2;
+                                $listaEstadoCivil[0]['0'] = $pessoa[0][7];
+                                $listaEstadoCivil[0]['id'] = $pessoa[0][6];
+                                $listaEstadoCivil[0]['1'] = $pessoa[0][6];
+                                $listaEstadoCivil[0]['descricao'] = $pessoa[0][7];
+                                
+                                $listaEstadoCivil[$i]['0'] = $aux1;
+                                $listaEstadoCivil[$i]['descricao'] = $aux2;
+                                $listaEstadoCivil[$i]['1'] = $aux3;
+                                $listaEstadoCivil[$i]['id'] = $aux4;
+                                
                             }
                         }
+                        error_log(print_r($listaEstadoCivil,true));
 
                         echo "<select name = 'idEstadoCivilAlteraDados'>";
                         $tamanho = count($listaEstadoCivil);
                         if (isset($listaEstadoCivil)) {
-                            for ($i = 0; $i < $tamanho; $i = $i + 2) {
-                                echo "<option value = {$listaEstadoCivil[$i]}";
+                            error_log(print_r($listaEstadoCivil, true));
+                            for ($i = 0; $i < $tamanho; $i = $i + 1) {
+                                echo "<option value = {$listaEstadoCivil[$i]['id']}";
                                 //echo "selected = 'selected'";
-                                echo ">{$listaEstadoCivil[$i + 1]}</option>";
+                                echo ">{$listaEstadoCivil[$i]['descricao']}</option>";
                             }
                         }
                         echo "</select>";
@@ -207,44 +225,48 @@
             // Verifica se os campos estão vazios
 
             if (!razaoSocialPF.value) {
-            alert('Informe uma razao social!');
+            alert('Informe uma razão social!');
             //Impede o envio do form
             e.preventDefault();
+            return 0;
             }
 
             if (!nomeFantasiaPF.value) {
             alert('Informe um nome fantasia!');
             //Impede o envio do form
             e.preventDefault();
+            return 0;
             }
 
             //Retira a pontuação do RG
             rg = rgPF.value.replace(/\.|\-/g, '');
 
             if (!rg || isNaN(rg)) {
-            alert('Informe um RG valido.');
+            alert('Informe um RG válido.');
             //Impede o envio do form
             e.preventDefault();
+            return 0;
             }
 
             if (!cpfPF.value || cpfPF.value.length !== 14) {
-            alert('Informe um CPF valido.');
+            alert('Informe um CPF válido.');
             //Impede o envio do form
             e.preventDefault();
+            return 0;
             }
 
-            console.log(!cpfCPF);
-
-            if (!telefonePF.value) {
-            alert('Informe um telefone.');
+            if (!telefonePF.value || telefonePF.value.length < 8) {
+            alert('Informe um telefone válido.');
             //Impede o envio do form
             e.preventDefault();
+            return 0;
             }
 
             if (!emailPF.value || emailPF.value==""|| emailPF.value.indexOf('@')==-1 || emailPF.value.indexOf('.')==-1) {
-            alert('Informe um e-mail valido.');
+            alert('Informe um e-mail válido.');
             //Impede o envio do form
             e.preventDefault();
+            return 0;
             }
 
         });
@@ -265,12 +287,14 @@
                 alert('Informe uma razao social!');
                 //Impede o envio do form
                 e.preventDefault();
+                return 0;
                 }
 
                 if (!nomeFantasiaPJ.value) {
                 alert('Informe um nome fantasia!');
                 //Impede o envio do form
                 e.preventDefault();
+                return 0;
                 }
 
                 //Retira a pontuação do CNPJ
@@ -280,18 +304,21 @@
                 alert('Informe um cnpj valido!');
                 //Impede o envio do form
                 e.preventDefault();
+                return 0;
                 }
 
                 if (!telefonePJ.value) {
                 alert('Informe um telefone!');
                 //Impede o envio do form
                 e.preventDefault();
+                return 0;
                 }
 
                 if (!emailPJ.value || emailPJ.value=="" || emailPJ.value.indexOf('@')==-1 || emailPJ.value.indexOf('.')==-1) {
                 alert('Informe um e-mail valido!');
                 //Impede o envio do form
                 e.preventDefault();
+                return 0;
                 }
 
             });

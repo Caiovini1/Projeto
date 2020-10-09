@@ -29,7 +29,7 @@ class PessoaJuridica extends Pessoa
     public function setCnpj($cnpj){
         $this->cnpj = $cnpj;
     }
-
+ 
 }
 
 ?>

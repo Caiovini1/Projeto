@@ -65,6 +65,6 @@ class PessoaManager
     public function cadastrarPessoaJuridica($idGerado, $cnpj){
         $pessoaJ = new PessoaJuridica($idGerado, $cnpj);
         return $this->factory->cadastrarPessoaJuridica($pessoaJ);
-    }
+    } 
     
 }

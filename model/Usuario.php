@@ -46,6 +46,6 @@ class Usuario
 
     public function setSenha($senha){
         $this->senha = $senha;
-    }
+    } 
 }
 ?>

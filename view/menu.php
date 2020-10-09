@@ -1,4 +1,5 @@
 <?php
+ini_set('default_charset', 'UTF-8');
 if (isset($_SESSION['usuario'])) {
     $logado = true;
 } else
@@ -34,7 +35,7 @@ if (isset($_SESSION['usuario'])) {
             <a class="btn btn-danger" href="index.php?section=Controle&function=deslogar">Sair</a>
             </div>
         <?php }else {
-            ?><a href="index.php?section=Controle&function=loginAcao" class="btn btn-outline-success btn-lg active" role="button" aria-pressed="true">Login</a> <?php } ?>
+            ?><a  href="index.php?section=Controle&function=loginAcao" class="btn btn-outline-success btn-lg active" role="button" aria-pressed="true">Login</a> <?php } ?>
 
     </div>
 

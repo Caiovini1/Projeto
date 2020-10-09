@@ -40,6 +40,6 @@ class PessoaFisica extends Pessoa
     public function setCpf($cpf){
         $this->cpf = $cpf;
     }
-}
+} 
 
 ?>
